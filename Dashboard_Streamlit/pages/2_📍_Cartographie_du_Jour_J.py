@@ -13,7 +13,8 @@ from fpdf import FPDF
 from tempfile import NamedTemporaryFile
 import base64
 
-path = r"C:\Users\Alaa\Desktop\StreamlitHajji\Wiju.geoparquet"
+#path = r"C:\Users\Alaa\Desktop\StreamlitHajji\Wiju.geoparquet"
+path = 'https://alaasquan.github.io/Streamliy_app/Wiju.geoparquet'
 # Charger le GeoParquet
 gdf = gpd.read_parquet(path)
 
