@@ -242,7 +242,7 @@ whitebox==2.3.1
 whiteboxgui==2.3.0
 widgetsnbextension==4.0.9
 wrapt==1.14.1
-GDAL==3.4.3
+
 wsproto==1.2.0
 xarray==2022.12.0
 xyzservices==2023.10.1
