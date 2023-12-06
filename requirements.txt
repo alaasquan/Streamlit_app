@@ -245,4 +245,3 @@ xarray
 xyzservices
 zipp
 streamlit
-GDAL
