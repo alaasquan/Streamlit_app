@@ -14,7 +14,7 @@ from tempfile import NamedTemporaryFile
 import base64
 
 #path = r"C:\Users\Alaa\Desktop\StreamlitHajji\Wiju.geoparquet"
-path = 'https://alaasquan.github.io/Streamliy_app/Wiju.geoparquet'
+path = 'https://alaasquan.github.io/Streamlit_app/Wiju.geoparquet'
 # Charger le GeoParquet
 gdf = gpd.read_parquet(path)
 
