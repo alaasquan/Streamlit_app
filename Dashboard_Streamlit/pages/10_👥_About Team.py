@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 world_anim= 'https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/Animation_Lottiefiles/Worldmap.json'
-dashboard= 'https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/Animation_Lottiefiles/dashboard.json"
+dashboard= 'https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/Animation_Lottiefiles/dashboard.json'
 
 def load_lottiefile(url: str):
     response = requests.get(url)
