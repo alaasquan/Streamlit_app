@@ -3,17 +3,21 @@ from PIL import Image
 import json
 import requests
 from streamlit_lottie import st_lottie
+from io import BytesIO
 
 st.set_page_config(
     page_title="Home page",
     page_icon="👋",
 )
 
-world_anim= r'C:\Users\Alaa\Desktop\StreamlitHajji\Dashboard_Streamlit\pages\Animation_Json\Worldmap.json'
-dashboard= r"C:\Users\Alaa\Desktop\StreamlitHajji\Dashboard_Streamlit\pages\Animation_Json\dashboard.json"
-def load_lottiefile(filepath: str):
-	with open(filepath, 'r') as f:
-		return json.load(f)
+world_anim= 'https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/Animation_Lottiefiles/Worldmap.json'
+dashboard= 'https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/Animation_Lottiefiles/dashboard.json"
+
+def load_lottiefile(url: str):
+    response = requests.get(url)
+    response.raise_for_status()  # Raise an exception for bad responses
+    return response.json()
+
 
 def load_lottirurl(url: str):
 	r= requests.get(url)
@@ -127,14 +131,14 @@ col1, col2 = st.columns(2)
 # Image for Wiju
 with col1:
    
-    wiju_image_path =r"D:\CV\MyResume\AlaaPics\wijdane.jpeg"
+    wiju_image_path ='https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/team/wijdane.jpeg'
     wiju_image = Image.open(wiju_image_path)
     st.image(wiju_image, caption="Wijdane", use_column_width=True)
 
 # Image for Weirdo
 with col2:
     
-    weirdo_image_path=r"D:\CV\MyResume\AlaaPics\Alaa-.jpeg"
+    weirdo_image_path="https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/team/Alaa-.jpeg"
     weirdo_image = Image.open(weirdo_image_path)
     st.image(weirdo_image, caption="Alaa", use_column_width=True)
 
