@@ -61,7 +61,8 @@ st.info(f"You have chosen the attribute : {attribute_names[selected_attribute_in
 
 # Generate a list of file paths based on the selected attribute and fixed days
 days = [f"Jour{i}" for i in range(7)]
-selected_attribute_paths = [f"{base}/{day}-{selected_attribute}.tif" for day in days]
+#selected_attribute_paths = [f"{base}/{day}-{selected_attribute}.tif" for day in days]
+selected_attribute_paths = [os.path.join(base, f"{day}-{selected_attribute}.tif") for day in days]
 
 # Display the generated paths
 
@@ -69,24 +70,33 @@ for i, path in enumerate(selected_attribute_paths):
     globals()[f"path{i}"] = path
 
 # Replace tif_paths with the dynamically generated paths
-tif_paths = [
-    path0,
-    path1,
-    path2,
-    path3,
-    path4,
-    path5,
-    path6
-]
+
+tif_paths = selected_attribute_paths
 st.write(tif_paths)
+
+import requests
+
+# Generate a list of file paths based on the selected attribute and fixed days
+selected_attribute_paths = [f"{base}/Jour{i}-{selected_attribute}.tif" for i in range(7)]
+
 # Create a temporary directory to store individual frames
 temp_dir = "temp_frames"
 os.makedirs(temp_dir, exist_ok=True)
 
+# Function to download and read GeoTIFF files
+def download_and_read_tiff(url):
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+    
+    # Use a BytesIO object to read the content
+    with BytesIO(response.content) as stream:
+        img = tiff.imread(stream)
+    return img
+
 # Function to update the plot for each frame and save the image
-def update_and_save(frame, tif_path):
+def update_and_save(frame, tif_url):
     # Read TIFF image
-    img = tiff.imread(tif_path)
+    img = download_and_read_tiff(tif_url)
 
     # Create a figure and axis for the animation
     fig, ax = plt.subplots(figsize=(10, 8))
@@ -99,28 +109,25 @@ def update_and_save(frame, tif_path):
     
     plt.axis('off')
 
-    # Save the figure as an image in the temporary directory
-    temp_path = os.path.join(temp_dir, f"frame_{frame}.png")
-    plt.savefig(temp_path, format='png', bbox_inches="tight", pad_inches=0, transparent=True)
+    # Save the figure as an image in-memory
+    buf = BytesIO()
+    plt.savefig(buf, format='png', bbox_inches="tight", pad_inches=0, transparent=True)
     plt.close(fig)
 
+    # Return the image data
+    return buf.getvalue()
 
 # Create the animation and save frames
-for frame, tif_path in enumerate(tif_paths):
-    update_and_save(frame, tif_path)
+frames = [update_and_save(frame, tif_url) for frame, tif_url in enumerate(selected_attribute_paths)]
 
-# Read frames back into the frames list
-frames = []
-for frame in range(len(tif_paths)):
-    temp_path = os.path.join(temp_dir, f"frame_{frame}.png")
-    frames.append(Image.open(temp_path).convert("RGBA"))
+
 
 # Save the frames as a GIF
 gif_buffer = BytesIO()
-frames[0].save(
+Image.open(BytesIO(frames[0])).save(
     gif_buffer,
     save_all=True,
-    append_images=frames[1:],
+    append_images=[Image.open(BytesIO(frame)) for frame in frames[1:]],
     duration=1000,  # milliseconds per frame (adjust as needed)
     loop=0,  # 0 for infinite loop
     format="GIF"
@@ -128,7 +135,6 @@ frames[0].save(
 
 # Encode the gif bytes to base64
 gif_base64 = base64.b64encode(gif_buffer.getvalue()).decode()
-
 import rasterio
 
 # ... (previous code)
