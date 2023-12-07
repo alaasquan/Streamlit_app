@@ -8,15 +8,52 @@ import os
 import folium
 from streamlit_folium import folium_static as st_folium_static
 from folium.plugins import DualMap
+from PIL import Image
+import json
+import requests
+from streamlit_lottie import st_lottie
 
-# GeoParquet file path
-path = r"C:\Users\Alaa\Desktop\StreamlitHajji\Wiju.geoparquet"
-# Load your GeoDataFrame from GeoParquet
-gdf = gpd.read_parquet(path)
 
+def load_lottiefile(url: str):
+    response = requests.get(url)
+    response.raise_for_status()  # Raise an exception for bad responses
+    return response.json()
+
+def load_lottirurl(url: str):
+	r= requests.get(url)
+	if r.status_code != 200:
+		return None
+	return r.json
+
+loop= 'https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/Animation_Lottiefiles/loop.json'
+lottie_loop=load_lottiefile(loop)
+
+
+
+path = 'https://alaasquan.github.io/Streamlit_app/Wiju.geoparquet'
+response = requests.get(path)
+geoparquet_content = BytesIO(response.content)
+gdf = gpd.read_parquet(geoparquet_content)
 # Title for the Streamlit app
-st.title("Raster Timelapse and Comparison")
 
+col1, col2 = st.columns(2)
+
+# Text for column 1
+with col1:
+    st.title("Raster Timelapse and Comparison")
+# Text for column 2
+with col2:
+
+
+    st_lottie(lottie_loop,
+	   speed= 0.75,
+	   reverse=False,
+	   loop=True,
+	   quality='low',
+	   height='125px',
+	   width='125px',)
+
+st.write('  ')
 
 # Sidebar for selecting the property
 selected_property = st.sidebar.selectbox('Select Property', ["Pression(hPa)", "Vitesse_Vent(Km/h)", "Température(en °C)"], key="unique_key_property")
@@ -37,8 +74,9 @@ if day_columns:
         # Plot the raster data for the current frame
         column_name = day_columns[frame]
         filtered_data = gdf[gdf[column_name].notnull()]
-        filtered_data.plot(column=column_name, cmap='viridis', legend=True, ax=ax)
-        plt.title(f"Raster Timelapse Frame {frame + 1} - {column_name}")
+        plot=filtered_data.plot(column=column_name,cmap='coolwarm', legend=True, ax=ax)
+        plt.title(f"Raster Timelapse Frame {frame + 1} - {column_name}",color='white')
+         # Customize the legend text color (replace 'blue' with your desired color
         plt.axis('off')
         # Save the figure as an image in the temporary directory
         temp_path = os.path.join(temp_dir, f"frame_{frame}.png")
