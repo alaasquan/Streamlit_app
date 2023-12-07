@@ -125,22 +125,7 @@ st.write("""
 Feel free to explore the dashboard, and let us know how we can enhance this geospatial analytics experience!
 """)
 
-# Display images of team members
-col1, col2 = st.columns(2)
 
-# Image for Wiju
-with col1:
-   
-    wiju_image_path ='https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/team/wijdane.jpeg'
-    wiju_image = Image.open(wiju_image_path)
-    st.image(wiju_image, caption="Wijdane", use_column_width=True)
-
-# Image for Weirdo
-with col2:
-    
-    weirdo_image_path="https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit/team/Alaa-.jpeg"
-    weirdo_image = Image.open(weirdo_image_path)
-    st.image(weirdo_image, caption="Alaa", use_column_width=True)
 
 st.sidebar.success("Select a page above.")
 st_lottie(lottie_World_map,
