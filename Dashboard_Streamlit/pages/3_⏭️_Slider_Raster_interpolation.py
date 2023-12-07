@@ -9,8 +9,8 @@ from pathlib import Path
 
 st.title("GeoTIFF Image Viewer with Legend")
 
-# Specify the path to your GeoTIFF files
-base_path = Path(r"C:\Users\Alaa\Desktop\StreamlitHajji\Dashboard_Streamlit")
+
+base='https://alaasquan.github.io/Streamlit_app/Dashboard_Streamlit'
 attributes = ["Pression", "Temperature", "Vitesse-Vent"]
 
 # User input: Select attribute and day
@@ -20,13 +20,15 @@ days = [f"Jour{i}" for i in range(0, 7)]
 
 # Announce the selected attribute
 attribute_names = {0: "Pression", 1: "Temperature", 2: "Vitesse-Vent"}
-st.info(f"Vous Avez choisis l'attribut: {attribute_names[selected_attribute_index]}")
+st.success(f"Vous Avez choisis l'attribut: {attribute_names[selected_attribute_index]}")
 
 # Get the selected attribute based on the index
 selected_attribute = attributes[selected_attribute_index]
 
 # Construct the file path based on user selection
-tiff_path = base_path / f"{days[selected_day]}-{selected_attribute}.tif"
+tiff_path = Path(base) / f"{days[selected_day]}-{selected_attribute}.tif"
+#real_tiff_path=
+
 # Pre-define three color palettes
 color_palettes = {
     "Pression": ['#d7191c', '#fdae61', '#ffffbf', '#abdda4', '#2b83ba'],
