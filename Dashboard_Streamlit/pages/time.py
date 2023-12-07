@@ -72,7 +72,6 @@ for i, path in enumerate(selected_attribute_paths):
 # Replace tif_paths with the dynamically generated paths
 
 tif_paths = selected_attribute_paths
-st.write(tif_paths)
 
 import requests
 
